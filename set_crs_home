@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set_crs_home() {
+local ORATAB="/etc/oratab"
+[ "$(uname -s)" == "SunOS" ] && local ORATAB="/var/opt/oracle/oratab"
+
+export CRS_HOME="$(awk -F ':' ' $1 ~ /^+APX[0-9]$/ { print $2 }' ${ORATAB} |sort -u)"
+[ -z "${CRS_HOME}" ] && export CRS_HOME="$(awk -F ':' ' $1 ~ /^+ASM[0-9]$/ { print $2 }' ${ORATAB}|sort -u)"
+
+if [ ! -d "${CRS_HOME}" -o ! -e "${CRS_HOME}/bin/crsctl" ]; then
+export CRS_HOME="/u01/app/invalid/grid"
+echo "CRS_HOME could not be determined and is set to ${CRS_HOME}" 1>&2
+return 1
+fi
+}
