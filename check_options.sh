@@ -9,6 +9,7 @@
 #########################################################
 #                                                       #
 # v0.1 11/2016 Hillinger initial creation               #
+# v0.2 02/2017 Hillinger add unified audit              #
 #                                                       #
 #########################################################
 
@@ -17,7 +18,7 @@ if [ -z "${ORACLE_HOME}" ]; then
   echo "ERROR: ORACLE_HOME not set!" 1>&2
   exit 1
 elif [ ! -d ${ORACLE_HOME} ]; then
-  echo "Oracle-Home ${ORACLE_HOME} not found!"
+  echo "Oracle Home ${ORACLE_HOME} not found!" 1>&2
   exit 1
 elif [ ! -r  $ORACLE_HOME/rdbms/lib/libknlopt.a ]; then
   echo "ERROR:  $ORACLE_HOME/rdbms/lib/libknlopt.a does not exist or is not readable!" 1>&2
@@ -90,6 +91,12 @@ do
    ;;
    kcincx.o)
      echo "(CTX)  Context Management Text             OFF"
+   ;;
+   kzaiang.o)
+     echo "(UNI)  Oracle Unified Auditing         ON"
+     ;;
+   kzanang.o)
+     echo "(UNI)  Oracle Unified Auditing             OFF"
    ;;
    *)  # gather unknown option
       unknown_options="${unknown_options} $i"
